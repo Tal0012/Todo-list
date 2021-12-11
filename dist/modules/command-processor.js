@@ -12,26 +12,32 @@ import ToDoList from './todo-list.js';
 import prompt from 'prompt-sync';
 export default class CommandProcessor {
     constructor() {
-        this.helpDesc = {
-            create: `\nCreate a new task`,
-            update: `\nChange task status from active to inactive and vice-versa`,
-            remove: `\nRemove task by ID`,
-            read: `\nGet all tasks and display them to the console`,
-            removecompleted: `\nRemove all completed tasks`
-        };
-        this.helpExmp = {
-            create: `\nnode ./dist/app.js create --title='My First Note'\n`,
-            update: `\nnode ./dist/app.js update --id=[ID]\n`,
-            remove: `\nnode ./dist/app.js remove --id=[ID]\n`,
-            read: `\nnode ./dist/app.js read --filter:'Completed'\n`,
-            removecompleted: `\nnode ./dist/app.js removecompleted`
-        };
-        this.helpParams = {
-            create: `\nTitle: Task's title`,
-            update: `\nId: the id of the task you would like to update`,
-            remove: `\nId: the id of the task you would like to remove`,
-            read: `\nFilter: Filter displayed tasks by: 'All', 'Completed' or 'Open'`,
-            removecompleted: `\nNone`
+        this.helpObj = {
+            create: {
+                description: `Create a new task`,
+                parameters: `Title: Task's title`,
+                examples: `node ./dist/app.js create --title='My First Note'`
+            },
+            update: {
+                description: `Change task status from active to inactive and vice-versa`,
+                parameters: `Id: the id of the task you would like to update`,
+                examples: `node ./dist/app.js update --id=[ID]`
+            },
+            remove: {
+                description: `Remove task by ID`,
+                parameters: `Id: the id of the task you would like to remove`,
+                examples: `node ./dist/app.js remove --id=[ID]`
+            },
+            read: {
+                description: `Get all tasks and display them to the console`,
+                parameters: `Filter: Filter displayed tasks by: 'All', 'Completed' or 'Open'`,
+                examples: `node ./dist/app.js read --filter:'Completed'`
+            },
+            removecompleted: {
+                description: `Remove all completed tasks`,
+                parameters: `None`,
+                examples: `node ./dist/app.js removecompleted`
+            }
         };
         this.commands = [];
         this.lastIndex = -1;
@@ -92,21 +98,14 @@ export default class CommandProcessor {
             }
         });
         this.printHelper = () => {
-            log.magenta(`/***********\n/*** Help ** \n/***********/`);
-            for (let cmd of Object.keys(this.helpDesc)) {
-                log.green(`******* ${cmd[0].toUpperCase() + cmd.slice(1)} *******`);
-                log.blue('Description: ', this.helpDesc[cmd]);
-                log.blue('Parameters: ', this.helpParams[cmd]);
-                log.blue('Example: ', this.helpExmp[cmd]);
-            }
+            log.magenta(`/********************************** Help **********************************/`);
+            console.table(this.helpObj);
         };
         this.askInput = (inputRequired) => {
             let waitForInput = true;
             let input = '';
             while (waitForInput) {
-                // log.green(`Please enter a valid ${inputRequired}:`)
                 input = prompt()(`Please enter a valid ${inputRequired}: `);
-                console.log(input);
                 if (input != '') {
                     waitForInput = false;
                     break;
