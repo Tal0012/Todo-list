@@ -9,7 +9,7 @@ const init = () => {
     //    const commandProccessor = new CommandProcessor();
     //    commandProccessor.argvProccessor();
     const todos = new ToDoList();
-    todos.display();
+    // todos.display();
 }
 
 

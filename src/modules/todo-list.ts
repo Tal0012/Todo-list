@@ -1,38 +1,57 @@
 import fs from "fs/promises";
 import log from "@ajar/marker";
+import { takeCoverage } from "v8";
 
 interface Task {
-    id: string;
+    id: number;
     title: string;
     isActive: boolean;
 }
 
 export default class ToDoList {
+    private static uniqueID = 0;
 
-    constructor() {
+    private constructor(){
 
     }
-
 
     /**********************
      * Public functions
      *********************/
-    display = async (): Promise<void> => {
-        const tasksArray: Task[] = await this.loadTasks();
-        log.obj(tasksArray);
+
+    static read =  async (filter:string): Promise<void> => {
+        let tasks: Task[] = await this.loadTasks();
+        log.obj(tasks);
     };
+
+    static create = async (title:string):Promise<void> => {
+        let tasks: Task[] = await this.loadTasks();
+        tasks.push({
+            title,
+            id: this.generateTaskUid(),
+            isActive: true
+        });
+        this.writeTasks(tasks);
+    }
+
+    
 
     /**********************
      * Private functions
      *********************/
-    private generateTaskUid = (): string => Math.random().toString(16).substring(2);
+    private static generateTaskUid = (): number => ToDoList.uniqueID++;
 
-    private loadTasks = async (): Promise<Task[]> => {
-        const tasksDataBuffer = await fs.readFile("../todos.json", "utf-8");
-        return JSON.parse(tasksDataBuffer);
+    private static loadTasks = async (): Promise<Task[]> => {
+        let tasks: Task[];
+        try{
+            tasks = JSON.parse(await fs.readFile("../todos.json", "utf-8"));
+        }catch(err){
+            tasks = [];
+        }
+        return tasks;
     };
 
-    private writeTasks = async (tasks: Task[]): Promise<void> => {
+    private static writeTasks = async (tasks: Task[]): Promise<void> => {
         await fs.writeFile("../todos.json", JSON.stringify(tasks), "utf-8");
     };
 }
