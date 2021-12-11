@@ -9,6 +9,7 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
 };
 import log from '@ajar/marker';
 import ToDoList from './todo-list.js';
+import prompt from 'prompt-sync';
 export default class CommandProcessor {
     constructor() {
         this.helpDesc = {
@@ -58,15 +59,24 @@ export default class CommandProcessor {
             for (let cmd of this.commands) {
                 switch (cmd.title.toLowerCase()) {
                     case 'create':
+                        if (cmd.arguments.title === undefined) {
+                            cmd.arguments.title = this.askInput('Title');
+                        }
                         yield ToDoList.create(cmd.arguments.title);
                         break;
                     case 'read':
                         yield ToDoList.read(cmd.arguments.filter);
                         break;
                     case 'update':
+                        if (cmd.arguments.id === undefined) {
+                            cmd.arguments.id = this.askInput('ID');
+                        }
                         yield ToDoList.update(cmd.arguments.id);
                         break;
                     case 'remove':
+                        if (cmd.arguments.id === undefined) {
+                            cmd.arguments.id = this.askInput('ID');
+                        }
                         yield ToDoList.remove(cmd.arguments.id);
                         break;
                     case 'help':
@@ -89,6 +99,21 @@ export default class CommandProcessor {
                 log.blue('Parameters: ', this.helpParams[cmd]);
                 log.blue('Example: ', this.helpExmp[cmd]);
             }
+        };
+        this.askInput = (inputRequired) => {
+            let waitForInput = true;
+            let input = '';
+            while (waitForInput) {
+                // log.green(`Please enter a valid ${inputRequired}:`)
+                input = prompt()(`Please enter a valid ${inputRequired}: `);
+                console.log(input);
+                if (input != '') {
+                    waitForInput = false;
+                    break;
+                }
+                log.red(`${inputRequired} is empty, please try again...`);
+            }
+            return input;
         };
     }
 }
