@@ -34,4 +34,6 @@ export default class CommandProcessor{
         }
         log.obj(this.commandsArray);
     }
+
+
 }
