@@ -61,39 +61,44 @@ export default class CommandProcessor {
             }
         };
         this.start = () => __awaiter(this, void 0, void 0, function* () {
-            log.obj({ commands: this.commands });
             for (let cmd of this.commands) {
-                switch (cmd.title.toLowerCase()) {
-                    case 'create':
-                        if (cmd.arguments.title === undefined) {
-                            cmd.arguments.title = this.askInput('Title');
-                        }
-                        yield ToDoList.create(cmd.arguments.title);
-                        break;
-                    case 'read':
-                        yield ToDoList.read(cmd.arguments.filter);
-                        break;
-                    case 'update':
-                        if (cmd.arguments.id === undefined) {
-                            cmd.arguments.id = this.askInput('ID');
-                        }
-                        yield ToDoList.update(cmd.arguments.id);
-                        break;
-                    case 'remove':
-                        if (cmd.arguments.id === undefined) {
-                            cmd.arguments.id = this.askInput('ID');
-                        }
-                        yield ToDoList.remove(cmd.arguments.id);
-                        break;
-                    case 'help':
-                        this.printHelper();
-                        break;
-                    case 'removecompleted':
-                        ToDoList.removeAllCompleted();
-                        break;
-                    default:
-                        log.err(`${cmd.title} command doesn't exist, please check help`);
-                        break;
+                let cmdName = cmd.title.toLowerCase();
+                if (cmdName === 'create' || cmdName === 'c') {
+                    if (cmd.arguments.title === undefined) {
+                        cmd.arguments.title = this.askInput('Title');
+                    }
+                    yield ToDoList.create(cmd.arguments.title);
+                }
+                else if (cmdName === 'read' || cmdName === 'r') {
+                    if (cmd.arguments.filter === undefined) {
+                        cmd.arguments.filter = '';
+                    }
+                    yield ToDoList.read(cmd.arguments.filter);
+                }
+                else if (cmdName === 'update' || cmdName === 'u') {
+                    if (cmd.arguments.id === undefined) {
+                        cmd.arguments.id = this.askInput('ID');
+                    }
+                    yield ToDoList.update(cmd.arguments.id);
+                }
+                else if (cmdName === 'remove' || cmdName === 'r') {
+                    if (cmd.arguments.id === undefined) {
+                        cmd.arguments.id = this.askInput('ID');
+                    }
+                    yield ToDoList.remove(cmd.arguments.id);
+                    break;
+                }
+                else if (cmdName === 'help' || cmdName === 'h') {
+                    this.printHelper();
+                    break;
+                }
+                else if (cmdName === 'removecompleted' || cmdName === 'rc') {
+                    ToDoList.removeAllCompleted();
+                    break;
+                }
+                else {
+                    log.err(`${cmd.title} command doesn't exist, please check help`);
+                    break;
                 }
             }
         });
