@@ -11,6 +11,24 @@ import log from '@ajar/marker';
 import ToDoList from './todo-list.js';
 export default class CommandProcessor {
     constructor() {
+        this.helpDesc = {
+            create: `\nCreate a new task`,
+            update: `\nChange task status from active to inactive and vice-versa`,
+            remove: `\nRemove task by ID`,
+            read: `\nGet all tasks and display them to the console`
+        };
+        this.helpExmp = {
+            create: `\nnode ./dist/app.js create --title='My First Note'\n`,
+            update: `\nnode ./dist/app.js update --id=[ID]\n`,
+            remove: `\nnode ./dist/app.js remove --id=[ID]\n`,
+            read: `\nnode ./dist/app.js read --filter:'Completed'\n`
+        };
+        this.helpParams = {
+            create: `\nTitle: Task's title`,
+            update: `\nId: the id of the task you would like to update`,
+            remove: `\nId: the id of the task you would like to remove`,
+            read: `\nFilter: Filter displayed tasks by: 'All', 'Completed' or 'Open'`
+        };
         this.commands = [];
         this.lastIndex = -1;
         this.argvProccessor = () => {
@@ -48,11 +66,23 @@ export default class CommandProcessor {
                     case 'remove':
                         yield ToDoList.remove(cmd.arguments.id);
                         break;
+                    case 'help':
+                        this.printHelper();
+                        break;
                     default:
                         log.err(`${cmd.title} command doesn't exist`);
                         break;
                 }
             }
         });
+        this.printHelper = () => {
+            log.magenta(`/***********\n/*** Help ** \n/***********/`);
+            for (let cmd of Object.keys(this.helpDesc)) {
+                log.green(`******* ${cmd[0].toUpperCase() + cmd.slice(1)} *******`);
+                log.blue('Description: ', this.helpDesc[cmd]);
+                log.blue('Parameters: ', this.helpParams[cmd]);
+                log.blue('Example: ', this.helpExmp[cmd]);
+            }
+        };
     }
 }
