@@ -22,13 +22,14 @@ ToDoList.uniqueID = 0;
 ToDoList.read = (filter) => __awaiter(void 0, void 0, void 0, function* () {
     let tasks = yield _a.loadTasks();
     log.obj(tasks);
+    _a.printTasks(tasks);
 });
 ToDoList.create = (title) => __awaiter(void 0, void 0, void 0, function* () {
     let tasks = yield _a.loadTasks();
     tasks.push({
         title,
         id: _a.uidGenerator(),
-        isActive: true
+        isActive: 'true'
     });
     yield _a.writeTasks(tasks);
 });
@@ -36,7 +37,7 @@ ToDoList.update = (id) => __awaiter(void 0, void 0, void 0, function* () {
     const tasks = yield _a.loadTasks();
     tasks.forEach((task) => {
         if (task.id === id) {
-            task.isActive = !task.isActive;
+            task.isActive = task.isActive === 'true' ? 'false' : 'true';
         }
     });
     yield _a.writeTasks(tasks);
@@ -66,3 +67,9 @@ ToDoList.loadTasks = () => __awaiter(void 0, void 0, void 0, function* () {
 ToDoList.writeTasks = (tasks) => __awaiter(void 0, void 0, void 0, function* () {
     yield fs.writeFile("./todos.json", JSON.stringify(tasks), "utf-8");
 });
+ToDoList.printTasks = (tasks) => {
+    console.table(tasks.map((task) => {
+        task.isActive = task.isActive === 'true' ? "\u2610" : "\u2705";
+        return task;
+    }));
+};

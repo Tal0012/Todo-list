@@ -14,24 +14,24 @@ interface HelpDescriptions {
     [key: string]: string;
 }
 export default class CommandProcessor {
-    private helpDesc : HelpDescriptions = {
+    private helpDesc: HelpDescriptions = {
         create: `\nCreate a new task`,
         update: `\nChange task status from active to inactive and vice-versa`,
         remove: `\nRemove task by ID`,
         read: `\nGet all tasks and display them to the console`
     }
-    private helpExmp : HelpDescriptions = {
+    private helpExmp: HelpDescriptions = {
         create: `\nnode ./dist/app.js create --title='My First Note'\n`,
         update: `\nnode ./dist/app.js update --id=[ID]\n`,
         remove: `\nnode ./dist/app.js remove --id=[ID]\n`,
         read: `\nnode ./dist/app.js read --filter:'Completed'\n`
-    } 
-    private helpParams : HelpDescriptions = {
+    }
+    private helpParams: HelpDescriptions = {
         create: `\nTitle: Task's title`,
         update: `\nId: the id of the task you would like to update`,
         remove: `\nId: the id of the task you would like to remove`,
         read: `\nFilter: Filter displayed tasks by: 'All', 'Completed' or 'Open'`
-    } 
+    }
     private commands: Command[] = [];
     private lastIndex: number = -1;
 
@@ -56,14 +56,14 @@ export default class CommandProcessor {
     }
 
     start = async (): Promise<void> => {
-        log.obj({ commands: this.commands});
+        log.obj({ commands: this.commands });
         for (let cmd of this.commands) {
             switch (cmd.title.toLowerCase()) {
                 case 'create':
-                     await ToDoList.create(cmd.arguments.title);
+                    await ToDoList.create(cmd.arguments.title);
                     break;
                 case 'read':
-                     await ToDoList.read(cmd.arguments.filter);
+                    await ToDoList.read(cmd.arguments.filter);
                     break;
                 case 'update':
                     await ToDoList.update(cmd.arguments.id);
@@ -75,21 +75,21 @@ export default class CommandProcessor {
                     this.printHelper();
                     break;
                 default:
-                    log.err(`${cmd.title} command doesn't exist`);
+                    log.err(`${cmd.title} command doesn't exist, please check help`);
                     break;
             }
         }
     }
 
-    private printHelper = ():void => {
+    private printHelper = (): void => {
         log.magenta(`/***********\n/*** Help ** \n/***********/`);
-        for(let cmd of Object.keys(this.helpDesc)){
+        for (let cmd of Object.keys(this.helpDesc)) {
             log.green(`******* ${cmd[0].toUpperCase() + cmd.slice(1)} *******`)
             log.blue('Description: ', this.helpDesc[cmd]);
             log.blue('Parameters: ', this.helpParams[cmd]);
             log.blue('Example: ', this.helpExmp[cmd]);
         }
-        
+
     }
 
 }

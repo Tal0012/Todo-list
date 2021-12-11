@@ -70,7 +70,7 @@ export default class CommandProcessor {
                         this.printHelper();
                         break;
                     default:
-                        log.err(`${cmd.title} command doesn't exist`);
+                        log.err(`${cmd.title} command doesn't exist, please check help`);
                         break;
                 }
             }
