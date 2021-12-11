@@ -1,6 +1,5 @@
 import fs from "fs/promises";
 import log from "@ajar/marker";
-import { takeCoverage } from "v8";
 
 interface Task {
     id: string;
@@ -21,8 +20,19 @@ export default class ToDoList {
 
     static read = async (filter: string): Promise<void> => {
         let tasks: Task[] = await this.loadTasks();
-        log.obj(tasks);
-        this.printTasks(tasks);
+        let filterFunc: (task:Task) => boolean;
+        switch(filter.toLowerCase()){
+            case 'completed':
+                filterFunc = (task:Task) => task.isActive === 'false';
+                break;
+            case 'open':
+                filterFunc = (task:Task) => task.isActive === 'true';
+                break;
+            default:
+                filterFunc = (task:Task) => true;
+                break;
+        }
+        this.printTasks(tasks.filter(filterFunc));
     };
 
     static create = async (title: string): Promise<void> => {

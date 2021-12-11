@@ -9,7 +9,6 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
 };
 var _a;
 import fs from "fs/promises";
-import log from "@ajar/marker";
 export default class ToDoList {
     constructor() {
     }
@@ -21,8 +20,19 @@ ToDoList.uniqueID = 0;
  *********************/
 ToDoList.read = (filter) => __awaiter(void 0, void 0, void 0, function* () {
     let tasks = yield _a.loadTasks();
-    log.obj(tasks);
-    _a.printTasks(tasks);
+    let filterFunc;
+    switch (filter.toLowerCase()) {
+        case 'completed':
+            filterFunc = (task) => task.isActive === 'false';
+            break;
+        case 'open':
+            filterFunc = (task) => task.isActive === 'true';
+            break;
+        default:
+            filterFunc = (task) => true;
+            break;
+    }
+    _a.printTasks(tasks.filter(filterFunc));
 });
 ToDoList.create = (title) => __awaiter(void 0, void 0, void 0, function* () {
     let tasks = yield _a.loadTasks();
