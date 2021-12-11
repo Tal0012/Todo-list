@@ -14,7 +14,6 @@ export default class ToDoList {
     }
 }
 _a = ToDoList;
-ToDoList.uniqueID = 0;
 /**********************
  * Public functions
  *********************/
@@ -58,6 +57,12 @@ ToDoList.remove = (id) => __awaiter(void 0, void 0, void 0, function* () {
         return task.id !== id;
     });
     yield _a.writeTasks(tasks);
+});
+ToDoList.removeAllCompleted = () => __awaiter(void 0, void 0, void 0, function* () {
+    let tasks = yield _a.loadTasks();
+    yield _a.writeTasks(tasks.filter((task) => {
+        return task.isActive === 'true';
+    }));
 });
 /**********************
  * Private functions

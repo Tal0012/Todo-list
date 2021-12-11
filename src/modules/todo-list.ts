@@ -8,7 +8,7 @@ interface Task {
 }
 
 export default class ToDoList {
-    private static uniqueID = 0;
+    private static uniqueID : string;
 
     private constructor() {
 
@@ -61,6 +61,13 @@ export default class ToDoList {
             return task.id !== id;
         });
         await this.writeTasks(tasks);
+    }
+
+    static removeAllCompleted = async () : Promise<void> => {
+        let tasks: Task[] = await this.loadTasks();
+        await this.writeTasks(tasks.filter((task:Task)=> {
+            return task.isActive === 'true';
+        }));
     }
 
 

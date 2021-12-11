@@ -18,19 +18,22 @@ export default class CommandProcessor {
         create: `\nCreate a new task`,
         update: `\nChange task status from active to inactive and vice-versa`,
         remove: `\nRemove task by ID`,
-        read: `\nGet all tasks and display them to the console`
+        read: `\nGet all tasks and display them to the console`,
+        removecompleted: `\nRemove all completed tasks`
     }
     private helpExmp: HelpDescriptions = {
         create: `\nnode ./dist/app.js create --title='My First Note'\n`,
         update: `\nnode ./dist/app.js update --id=[ID]\n`,
         remove: `\nnode ./dist/app.js remove --id=[ID]\n`,
-        read: `\nnode ./dist/app.js read --filter:'Completed'\n`
+        read: `\nnode ./dist/app.js read --filter:'Completed'\n`,
+        removecompleted: `\nnode ./dist/app.js removecompleted`
     }
     private helpParams: HelpDescriptions = {
         create: `\nTitle: Task's title`,
         update: `\nId: the id of the task you would like to update`,
         remove: `\nId: the id of the task you would like to remove`,
-        read: `\nFilter: Filter displayed tasks by: 'All', 'Completed' or 'Open'`
+        read: `\nFilter: Filter displayed tasks by: 'All', 'Completed' or 'Open'`,
+        removecompleted: `\nNone`
     }
     private commands: Command[] = [];
     private lastIndex: number = -1;
@@ -73,6 +76,9 @@ export default class CommandProcessor {
                     break;
                 case 'help':
                     this.printHelper();
+                    break;
+                case 'removecompleted':
+                    ToDoList.removeAllCompleted();
                     break;
                 default:
                     log.err(`${cmd.title} command doesn't exist, please check help`);
