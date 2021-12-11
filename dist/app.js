@@ -1,10 +1,9 @@
-import log from '@ajar/marker';
-import ToDoList from './modules/todo-list.js';
+import CommandProcessor from './modules/command-processor.js';
 const init = () => {
-    log.v('hhh');
-    //    const commandProccessor = new CommandProcessor();
-    //    commandProccessor.argvProccessor();
-    const todos = new ToDoList();
-    todos.display();
+    const commandProccessor = new CommandProcessor();
+    commandProccessor.argvProccessor();
+    commandProccessor.start();
+    // const todos = new ToDoList();
+    // todos.display();
 };
 init();

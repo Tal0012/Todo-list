@@ -6,7 +6,7 @@
   "type": "module",
   "scripts": {
     "compile": "npx tsc",
-    "dev": "node dist/app.js"
+    "dev": "node ./dist/app.js update --id='d5e67127c711d' read --title='all'"
   },
   "keywords": [],
   "author": "",
