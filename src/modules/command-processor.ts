@@ -94,7 +94,7 @@ export default class CommandProcessor {
                 }
                 await ToDoList.remove(cmd.arguments.id);
             } else if (cmdName === 'removecompleted' || cmdName === 'rc') {
-                ToDoList.removeAllCompleted();
+                await ToDoList.removeAllCompleted();
             } else {
                 this.printHelper();
             }
