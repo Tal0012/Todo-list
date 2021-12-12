@@ -86,19 +86,12 @@ export default class CommandProcessor {
                         cmd.arguments.id = this.askInput('ID');
                     }
                     yield ToDoList.remove(cmd.arguments.id);
-                    break;
-                }
-                else if (cmdName === 'help' || cmdName === 'h') {
-                    this.printHelper();
-                    break;
                 }
                 else if (cmdName === 'removecompleted' || cmdName === 'rc') {
                     ToDoList.removeAllCompleted();
-                    break;
                 }
                 else {
-                    log.err(`${cmd.title} command doesn't exist, please check help`);
-                    break;
+                    this.printHelper();
                 }
             }
         });
